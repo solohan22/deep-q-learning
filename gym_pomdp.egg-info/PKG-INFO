@@ -1,0 +1,12 @@
+Metadata-Version: 1.2
+Name: gym-pomdp
+Version: 0.0.1
+Summary: Gym extension for POMDP
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Description-Content-Type: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires-Python: >=3.5
