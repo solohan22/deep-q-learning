@@ -8,7 +8,7 @@ from keras.models import Sequential
 from keras.layers import Dense
 from keras.optimizers import Adam
 
-EPISODES = 1000
+EPISODES = 10000
 
 class DQNAgent:
     def __init__(self, state_size, action_size):
@@ -25,8 +25,10 @@ class DQNAgent:
     def _build_model(self):
         # Neural Net for Deep-Q learning Model
         model = Sequential()
-        model.add(Dense(24, input_dim=1, activation='relu'))
-        model.add(Dense(24, activation='relu'))
+        model.add(Dense(12, input_dim=1, activation='relu'))
+        model.add(Dense(12, activation='relu'))
+        model.add(Dense(12, activation='relu'))
+        model.add(Dense(12, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse',
                       optimizer=Adam(lr=self.learning_rate))
@@ -66,7 +68,7 @@ if __name__ == "__main__":
     state_size = env.observation_space.n
     action_size = env.action_space.n
     agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-dqn.h5")
+    # agent.load("./save/*.h5")
     done = False
     batch_size = 32
 
@@ -88,4 +90,4 @@ if __name__ == "__main__":
             if len(agent.memory) > batch_size:
                 agent.replay(batch_size)
         # if e % 10 == 0:
-        #     agent.save("./save/cartpole-dqn.h5")
+        #     agent.save("./save/*.h5")

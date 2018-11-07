@@ -53,7 +53,7 @@ class TigerEnv(gym.Env):
         self.state_space = Discrete(len(State))
         self.observation_space = Discrete(len(Obs))
         self._discount = .95
-        self._reward_range = (-float(10), float(10))
+        self._reward_range = (-float(100), float(10))
         self._query = 0
         self.seed(seed)
 
@@ -166,9 +166,9 @@ class TigerEnv(gym.Env):
         if action == Action.LISTEN.value:
             reward = -1
         elif not TigerEnv._is_terminal(state, action):
-            reward = 100
+            reward = 10
         else:
-            reward = -10
+            reward = -100
         return reward
 
 
