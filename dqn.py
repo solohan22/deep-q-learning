@@ -25,7 +25,7 @@ class DQNAgent:
     def _build_model(self):
         # Neural Net for Deep-Q learning Model
         model = Sequential()
-        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(24, input_dim=1, activation='relu'))
         model.add(Dense(24, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse',
@@ -47,7 +47,7 @@ class DQNAgent:
             target = reward
             if not done:
                 target = (reward + self.gamma *
-                          np.amax(self.model.predict(next_state)[0]))
+                          np.amax(self.model.predict(next_state)))
             target_f = self.model.predict(state)
             target_f[0][action] = target
             self.model.fit(state, target_f, epochs=1, verbose=0)
@@ -72,15 +72,13 @@ if __name__ == "__main__":
 
     for e in range(EPISODES):
         state = env.reset()
-        #state = np.reshape(state, [1, state_size])
-        state = np.array(state)
+        state = np.reshape(state, [1])
         for time in range(500):
             # env.render()
             action = agent.act(state)
             next_state, reward, done, _ = env.step(action)
             reward = reward if not done else -10
-            #next_state = np.reshape(next_state, [1, state_size])
-            next_state = np.array(next_state)
+            next_state = np.reshape(next_state, [1])
             agent.remember(state, action, reward, next_state, done)
             state = next_state
             if done:
