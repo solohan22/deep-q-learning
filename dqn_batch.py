@@ -10,6 +10,7 @@ from keras.optimizers import Adam
 
 EPISODES = 1000
 
+
 class DQNAgent:
     def __init__(self, state_size, action_size):
         self.state_size = state_size
@@ -23,7 +24,7 @@ class DQNAgent:
         self.model = self._build_model()
 
     def _build_model(self):
-        # Neural Net for Deep-Q learning Model
+        # Neural Net
         model = Sequential()
         model.add(Dense(24, input_dim=1, activation='relu'))
         model.add(Dense(24, activation='relu'))
