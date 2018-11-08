@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import random
 import gym
+import gym_pomdp
 import numpy as np
 from collections import deque
 from keras.models import Sequential
@@ -24,7 +25,7 @@ class DQNAgent:
     def _build_model(self):
         # Neural Net for Deep-Q learning Model
         model = Sequential()
-        model.add(Dense(24, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(24, input_dim=1, activation='relu'))
         model.add(Dense(24, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse',
@@ -68,34 +69,36 @@ class DQNAgent:
 
 
 if __name__ == "__main__":
-    env = gym.make('CartPole-v1')
-    state_size = env.observation_space.shape[0]
+    env = gym.make('Tiger-v0')
+    state_size = env.observation_space.n
     action_size = env.action_space.n
     agent = DQNAgent(state_size, action_size)
-    # agent.load("./save/cartpole-dqn.h5")
+    # agent.load("./save/-dqn.h5")
     done = False
     batch_size = 32
 
     for e in range(EPISODES):
         state = env.reset()
-        state = np.reshape(state, [1, state_size])
+        state = np.reshape(state, [1])
+        sum_reward=0
         for time in range(500):
             # env.render()
             action = agent.act(state)
             next_state, reward, done, _ = env.step(action)
-            reward = reward if not done else -10
-            next_state = np.reshape(next_state, [1, state_size])
+            reward = reward if not done else -100
+            next_state = np.reshape(next_state, [1])
             agent.remember(state, action, reward, next_state, done)
             state = next_state
+            sum_reward=sum_reward+reward
             if done:
                 print("episode: {}/{}, score: {}, e: {:.2}"
-                      .format(e, EPISODES, time, agent.epsilon))
+                      .format(e, EPISODES, sum_reward/(time+1), agent.epsilon))
                 break
             if len(agent.memory) > batch_size:
                 loss = agent.replay(batch_size)
                 # Logging training loss every 10 timesteps
                 if time % 10 == 0:
-                    print("episode: {}/{}, time: {}, loss: {:.4f}"
-                        .format(e, EPISODES, time, loss))  
+                    print("episode: {}/{}, score: {}, loss: {:.4f}"
+                        .format(e, EPISODES,sum_reward/(time+1), loss))  
         # if e % 10 == 0:
-        #     agent.save("./save/cartpole-dqn.h5")
+        #     agent.save("./save/-dqn.h5")

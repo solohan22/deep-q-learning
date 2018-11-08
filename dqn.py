@@ -5,7 +5,7 @@ import gym_pomdp
 import numpy as np
 from collections import deque
 from keras.models import Sequential
-from keras.layers import Dense
+from keras.layers import Dense,LSTM,SimpleRNN
 from keras.optimizers import Adam
 
 EPISODES = 10000
@@ -23,15 +23,17 @@ class DQNAgent:
         self.model = self._build_model()
 
     def _build_model(self):
-        # Neural Net for Deep-Q learning Model
+        # Neural Net
         model = Sequential()
         model.add(Dense(12, input_dim=1, activation='relu'))
         model.add(Dense(12, activation='relu'))
         model.add(Dense(12, activation='relu'))
+        #model.add(LSTM(12, input_shape=(10,1)))
         model.add(Dense(12, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse',
                       optimizer=Adam(lr=self.learning_rate))
+        model.summary()
         return model
 
     def remember(self, state, action, reward, next_state, done):
